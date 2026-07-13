@@ -519,11 +519,12 @@ function barsChart(data,labels){
   return s+'</svg>';
 }
 function funnel(exp,vis,intr){
-  const w=560,h=300,cx=w/2,yh=78,gap=22,tops=[40,150,260];
+  const w=560,h=300,cx=w/2,yh=78,gap=22;
+  const edges=[470,300,150,64];   // ancho de los 4 bordes horizontales — monótono decreciente, siempre positivo
   const rows=[['EXPOSICIÓN',fmt(exp),'#F0A878'],['VISUALIZACIONES',fmt(vis),OR],['INTERESADOS',fmt(intr),RE]];
-  const p1=vis/exp*100,p2=intr/vis*100;const pcts=[p1,p2];
+  const p1=exp?vis/exp*100:0,p2=vis?intr/vis*100:0;const pcts=[p1,p2];
   let s=`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">`;
-  rows.forEach((r,i)=>{const ytop=i*(yh+gap)+6;let tw=w-2*tops[i],bw=i+1<tops.length?w-2*tops[i+1]:tw-150;if(i===2)bw=tw-150;
+  rows.forEach((r,i)=>{const ytop=i*(yh+gap)+6;const tw=edges[i],bw=edges[i+1];
     const x1=cx-tw/2,x2=cx+tw/2,x3=cx+bw/2,x4=cx-bw/2;
     s+=`<path d="M ${x1},${ytop} L ${x2},${ytop} L ${x3},${ytop+yh} L ${x4},${ytop+yh} Z" fill="${r[2]}"/>`;
     s+=`<text x="${cx}" y="${ytop+yh/2-4}" text-anchor="middle" font-family="Playfair Display,serif" font-size="26" font-weight="900" fill="#fff">${r[1]}</text>`;
